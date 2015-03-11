@@ -14,6 +14,7 @@ import java.util.Vector;
  * 
  * @author Simon Gladstone
  * 
+ * 
  * @see #Coup(Scanner)
  * @see #Turn(Scanner)
  */
@@ -37,6 +38,7 @@ public class Coup {
 	
 	// Players
 	Player p1, p2;
+	
 	
 	// For input checking
 	Vector<String> IC = new Vector<String>();

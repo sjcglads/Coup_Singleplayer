@@ -407,7 +407,6 @@ public class Player {
 		// AI
 		case 'c':
 			boolean rc = false;
-			
 			// WASIF: AI decide to CHALLENGE here
 			
 			

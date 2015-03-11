@@ -406,8 +406,8 @@ public class Player {
 		
 		// AI
 		case 'c':
-			boolean rc = false;
-			// WASIF: AI decide to CHALLENGE here
+			boolean rc = false; 
+			// WASIF: AI decides to CHALLENGE here
 			
 			
 			String ddn = "does not";

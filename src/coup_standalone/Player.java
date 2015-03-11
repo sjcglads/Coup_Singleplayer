@@ -408,7 +408,7 @@ public class Player {
 		case 'c':
 			boolean rc = false;
 			
-			// WASIF: AI decide to block here
+			// WASIF: AI decide to CHALLENGE here
 			
 			
 			String ddn = "does not";
@@ -582,9 +582,9 @@ public class Player {
 			return Coup.getInput(vi, gs);
 		}
 		else {
-			// WASIF: replace return with AI logic to decide what move to make
-			
 			String rc = "INCOME";
+			
+			// WASIF: replace return with AI logic to decide what move to make
 			
 			//System.out.println("Computer will " + rc);
 			
@@ -802,6 +802,7 @@ public class Player {
 		// AI
 		case('c'):
 			// WASIF: AI decision on what card(s) to keep
+			
 			// if influence == 1, they only get to pick out of 2 cards, not 4
 			break;		
 		}

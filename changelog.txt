@@ -2,7 +2,7 @@
 
 DATE: March 11, 2015
 Version: 1.0.0
-Git commit hash: 08be1d634bbed08422acd3cbb512755ca429d29f
+Git commit hash: 205f77cfbd509ca8de03d4a43ef6b55692d638f4
 
 ***** Comments *****
 

@@ -13,7 +13,7 @@ import java.util.Vector;
  * 		functions which do game initialization and in-game mechanics respectively.</p>
  * 
  * @author Simon Gladstone
- * 
+ * @version 1.0.0
  * 
  * @see #Coup(Scanner)
  * @see #Turn(Scanner)

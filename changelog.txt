@@ -1,0 +1,31 @@
+********************************************************************************
+
+DATE: March 11, 2015
+Version: 1.0.0
+Git commit hash: 08be1d634bbed08422acd3cbb512755ca429d29f
+
+***** Comments *****
+
+Initial version.
+
+
+***** Known Issues *****
+
+- Removing influence from a player does not prompt them/require the AI to 
+		decide on a card to reveal if they have 2 influence.
+
+- Nothing to show human players which the card their opponent has revealed if
+		there is one
+	
+
+***** Changes *****
+
+N/A (it's version 1.0.0, duh)
+
+***** Forthcoming Changes *****
+
+(i.e. changes coming very soon)
+
+- Fix for influence removal issues and revealed card issues mentioned above
+
+- Completed Summary class with log IO and real-time game statistics

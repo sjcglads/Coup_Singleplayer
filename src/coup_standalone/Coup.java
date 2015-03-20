@@ -540,9 +540,25 @@ public class Coup {
 			// Game status update
 			System.out.println(user.getName() + " coins: " + user.getCoins());
 			System.out.println(user.getName() + " influence: " + user.getInf());
+			System.out.print(user.getName() + " shown card: ");
+			if (user.getInf() == 1) {
+				System.out.println(user.getHand()[1]);
+			}
+			else {
+				System.out.println("--");
+			}
+			
 			System.out.println();
+			
 			System.out.println(target.getName() + " coins: " + target.getCoins());
 			System.out.println(target.getName() + " influence: " + target.getInf());
+			System.out.print(target.getName() + " shown card: ");
+			if (target.getInf() == 1) {
+				System.out.println(target.getHand()[1]);
+			}
+			else {
+				System.out.println("--");
+			}
 			
 			System.out.println();
 			
@@ -601,19 +617,19 @@ public class Coup {
 					
 					// user challenges block
 					if (challenge) {
-						win = false; // will be switched to a method
+						win = target.hasCard("DUKE");
 						
 						// target did not have Duke
-						if (win) {
+						if (!win) {
 							// remove target influence
-							target.removeInf();
+							target.removeInf(gs);
 							execute = true;
 						}
 						
 						// target did have Duke
 						else {
 							// remove user influence
-							user.removeInf();
+							user.removeInf(gs);
 							
 							// swap target Duke for new card
 							target.swap("DUKE", deck);
@@ -651,12 +667,12 @@ public class Coup {
 				
 				// target will challenge duke
 				if (challenge) {
-					win = false;
+					win = user.hasCard("DUKE");
 					
 					// user had a Duke
 					if (win) {
 						// remove target influence 
-						target.removeInf();
+						target.removeInf(gs);
 						
 						// swap user Duke for new card
 						user.swap("DUKE", deck);
@@ -667,7 +683,7 @@ public class Coup {
 					// user did not have a Duke
 					else {
 						// remove user influence
-						user.removeInf();
+						user.removeInf(gs);
 					}
 				}
 				
@@ -714,19 +730,19 @@ public class Coup {
 						
 						// user challenges Contessa claim
 						if (challenge) {
-							win = false; // will be changed to method
+							win = target.hasCard("CONTESSA");
 							
 							// target did not have a Contessa
-							if (win) {
+							if (!win) {
 								// remove target influence
-								target.removeInf();
+								target.removeInf(gs);
 								execute = true;
 							}
 							
 							// target did have a Contessa
 							else {
 								// user loses influence
-								user.removeInf();
+								user.removeInf(gs);
 								
 								// target swap Contessa for new card
 								target.swap("CONTESSA", deck);
@@ -742,12 +758,12 @@ public class Coup {
 					
 					// target challenges Assassin
 					case 'c':
-						win = false;
+						win = user.hasCard("ASSASSIN");
 						
 						// user had Assassin
 						if (win) {
 							// target loses influence
-							target.removeInf();
+							target.removeInf(gs);
 							
 							// user swap Assassin for new card
 							user.swap("ASSASSIN", deck);
@@ -758,7 +774,7 @@ public class Coup {
 						// user did not have Assassin
 						else {
 							// user loses influence
-							user.removeInf();
+							user.removeInf(gs);
 						}
 						
 						break;
@@ -771,7 +787,7 @@ public class Coup {
 					
 					if (execute) {
 						// remove 1 influence from target
-						target.removeInf();
+						target.removeInf(gs);
 					}
 				}
 			}
@@ -790,12 +806,12 @@ public class Coup {
 				
 				// target challenges Ambassador
 				if (challenge) {
-					win = false;
+					win = user.hasCard("AMBASSADOR");
 					
 					// user had Ambassador
 					if (win) {
 						// remove target influence
-						target.removeInf();
+						target.removeInf(gs);
 						
 						// swap user Ambassador for new card
 						user.swap("AMBASSADOR", deck);
@@ -806,7 +822,7 @@ public class Coup {
 					// user did not have Ambassador
 					else {
 						// user remove influence
-						user.removeInf();
+						user.removeInf(gs);
 					}
 				}
 				
@@ -840,19 +856,20 @@ public class Coup {
 					
 					// user challenges Captain/Ambassador claim
 					if (challenge) {
-						win = false;
+						win = target.hasCard("CAPTAIN");
+						boolean win2 = target.hasCard("AMBASSADOR");
 						
 						// target had neither Captain nor Ambassador
-						if (win) {
+						if (!(win || win2)) {
 							// target loses influence
-							target.removeInf();
+							target.removeInf(gs);
 							execute = true;
 						}
 						
 						// target had either Captain or Ambassador
 						else {
 							// user loses influence
-							user.removeInf();
+							user.removeInf(gs);
 							
 							// swap target Captain/Ambassador for new card
 							if(isIn("CAPTAIN", target.getHand(), false)) {
@@ -873,12 +890,12 @@ public class Coup {
 				
 				// target challenges Captain
 				case 'c':
-					win = false;
+					win = user.hasCard("CAPTAIN");
 					
 					// user had Captain
 					if (win) {
 						// target loses influence
-						target.removeInf();
+						target.removeInf(gs);
 						
 						// user swap Captain for new card
 						user.swap("CAPTAIN", deck);
@@ -889,7 +906,7 @@ public class Coup {
 					// user did not have Captain
 					else {
 						// user loses influence
-						user.removeInf();
+						user.removeInf(gs);
 					}
 					
 					break;
@@ -925,7 +942,7 @@ public class Coup {
 				}
 				else {
 					user.addCoins(-7);
-					target.removeInf();
+					target.removeInf(gs);
 				}
 			}
 			

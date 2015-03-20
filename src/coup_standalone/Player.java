@@ -318,19 +318,78 @@ public class Player {
 	/**
 	 * <p>Function for removing 1 influence from a player.</p>
 	 * 
-	 * <p><strong>FUNCTION INCOMPLETE.</strong></p>
+	 * <p>Also contains the prompts for a human player to decide, and the logic for an AI to decide, which card to show if they
+	 * 		have 2 influence.</p>
 	 * 
 	 * <p>For uses other than in-game influence changes, use <code>setInf(int)</code>.</p>
 	 * 
+	 * @param gs Scanner used to prompt the user to decide which card to show
+	 * 
 	 * @see #setInf(int)
 	 */
-	public void removeInf() {
+	public void removeInf(Scanner gs) {
 		
 		if (Coup.dbg) {
 			System.out.println("*DEBUG* removing influence from " + this.getName() + "\n");
 		}
 		
-		// TODO: Must ask user which card to show, then set it to slot 2.
+		// if they have 2 influence, they must choose a card to show
+		if (this.getInf() == 2) {
+			// valid cards to keep (i.e. cards in the player's hand)
+			Vector<String> vc = new Vector<String>();
+			
+			// add their hand as valid input
+			vc.addElement(this.getHand()[0]);
+			vc.addElement(this.getHand()[1]);
+			
+			// 0 for card 1, 1 for card 2
+			int showindex;
+			
+			switch (this.getType()) {
+			// human
+			case 'h':
+				
+				// Prompts
+				System.out.println("Please select a card to show:");
+				System.out.println("\t1. " + this.getHand()[0]);
+				System.out.println("\t2. " + this.getHand()[1]);
+				
+				// Get input
+				String input = Coup.getInputnq(vc, gs);
+				
+				// Set card to swap
+				if (input.equalsIgnoreCase(vc.elementAt(0))) {
+					showindex = 0;
+				}
+				else {
+					showindex = 1;
+				}
+				
+				break;
+			
+			// AI
+			case 'c':
+				showindex = 0;
+				
+				// WASIF: AI decide which card to show here
+				//			must set showindex = 0 ^ 1
+				
+				break;
+			
+			// need this for code logic reasons, pay no mind
+			default:
+					showindex = 0;
+			}
+			
+			// Now the shown card has to go to slot 2 (just because)
+			if (showindex == 0) {
+				String cardswap = this.getHand()[1];
+				this.setCard(2, this.getHand()[0]);
+				this.setCard(1, cardswap);
+			}
+			
+			// don't do anything if they're showing card 2, it's already in the right spot
+		}
 		
 		influence--;
 		
@@ -384,7 +443,7 @@ public class Player {
 		
 		
 		// switch for human/AI
-		switch(type) {
+		switch(this.getType()) {
 		// human
 		case 'h':
 			
@@ -455,7 +514,7 @@ public class Player {
 		}
 		
 		// switch for human/AI
-		switch(type) {
+		switch(this.getType()) {
 		// human
 		case 'h':
 			
@@ -523,7 +582,7 @@ public class Player {
 		}
 		
 		// switch for human/AI
-		switch(type) {
+		switch(this.getType()) {
 		// human
 		case 'h':
 			Vector<String> vi = new Vector<String>();
@@ -577,7 +636,7 @@ public class Player {
 	 * @see Coup#getInput(Vector, Scanner)
 	 */
 	public String move(Vector<String> vi, Scanner gs) {
-		if (type == 'h') {
+		if (this.getType() == 'h') {
 			return Coup.getInput(vi, gs);
 		}
 		else {
@@ -592,15 +651,13 @@ public class Player {
 	}
 	
 	/**
-	 * <p>Function returns false if the Player has the provided card.</p>
+	 * <p>Function returns true if the Player has the provided card.</p>
 	 * 
-	 * <p>The intended use of this function, as the name would suggest, is to see if a Player wins or loses their challenge.</p>
-	 * 
-	 * @param card	The card being challenged
-	 * @return		<code>true</code> if the Player does <strong>NOT</strong> have the provided card. <code>false</code> otherwise.
+	 * @param card	The card being checked for
+	 * @return		<code>true</code> if the Player has the provided card. <code>false</code> otherwise.
 	 * @throws IllegalArgumentException	if the provided card is not a valid card
 	 */
-	public boolean challengeWin(String card) throws IllegalArgumentException {
+	public boolean hasCard(String card) throws IllegalArgumentException {
 		// valid cards
 		Vector<String> vc = new Vector<String>();
 		
@@ -616,10 +673,10 @@ public class Player {
 		}
 		
 		if (this.getHand()[0].equalsIgnoreCase(card) || this.getHand()[1].equalsIgnoreCase(card)) {
-			return false;
+			return true;
 		}
 		
-		return true;
+		return false;
 	}
 	
 	/**

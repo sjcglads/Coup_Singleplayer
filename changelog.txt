@@ -1,8 +1,50 @@
 ********************************************************************************
 
 DATE: March 11, 2015
+Version: 1.0.1
+Latest relevant Git commit hash:
+
+***** Comments *****
+
+- Summary class
+--- Remove debug dialog and replace with debug logging
+--- Add game logging
+- general code updates to comply with standard and good practices more
+++ Fix influence removal
+++ Fix Duke issue (was a complete oversight, forgot to change bool to method)
++++++ Changed Player.challengeWin(String) to Player.hasCard(String) while at it
+- 
+
+
+***** Known Issues *****
+
+- Removing influence from a player does not prompt them/require the AI to 
+		decide on a card to reveal if they have 2 influence.
+
+- Nothing to show human players which the card their opponent has revealed if
+		there is one
+	
+
+***** Changes *****
+
+N/A (it's version 1.0.0, duh)
+
+
+***** Forthcoming Changes *****
+
+(i.e. changes coming very soon)
+
+- Fix for influence removal issues and revealed card issues mentioned above
+
+- Completed Summary class with log IO and real-time game statistics
+
+********************************************************************************
+*
+********************************************************************************
+
+DATE: March 11, 2015
 Version: 1.0.0
-Git commit hash: 205f77cfbd509ca8de03d4a43ef6b55692d638f4
+Latest relevant Git commit hash: 205f77cfbd509ca8de03d4a43ef6b55692d638f4
 
 ***** Comments *****
 
@@ -21,6 +63,7 @@ Initial version.
 ***** Changes *****
 
 N/A (it's version 1.0.0, duh)
+
 
 ***** Forthcoming Changes *****
 

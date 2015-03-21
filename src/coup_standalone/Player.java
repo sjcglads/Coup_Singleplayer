@@ -434,6 +434,7 @@ public class Player {
 		vc.addElement("ASSASSIN");
 		vc.addElement("AMBASSADOR");
 		vc.addElement("CAPTAIN");
+		vc.addElement("2CARDS");
 		
 		// check for valid card name
 		if (!vc.contains(s)) {
@@ -650,6 +651,18 @@ public class Player {
 		}
 	}
 	
+	public void AIGotChallenged(String s, boolean won) {
+		return;
+	}
+	
+	public void AIChallengeResult(String s, boolean won) {
+		return;
+	}
+	
+	public void AIDoesMove(String s) {
+		return;
+	}
+	
 	/**
 	 * <p>Function returns true if the Player has the provided card.</p>
 	 * 
@@ -658,6 +671,9 @@ public class Player {
 	 * @throws IllegalArgumentException	if the provided card is not a valid card
 	 */
 	public boolean hasCard(String card) throws IllegalArgumentException {
+		
+		boolean rc = false;
+		
 		// valid cards
 		Vector<String> vc = new Vector<String>();
 		
@@ -672,11 +688,25 @@ public class Player {
 			throw new IllegalArgumentException("Invalid card name");
 		}
 		
-		if (this.getHand()[0].equalsIgnoreCase(card) || this.getHand()[1].equalsIgnoreCase(card)) {
-			return true;
+		if (!card.equalsIgnoreCase("2CARDS") && (this.getHand()[0].equalsIgnoreCase(card) || this.getHand()[1].equalsIgnoreCase(card))) {
+			rc = true;
+		}
+		else if (card.equalsIgnoreCase("2CARDS")) {
+			if (this.getHand()[0].equalsIgnoreCase("CAPTAIN") || this.getHand()[0].equalsIgnoreCase("AMBASSADOR") ||
+					this.getHand()[1].equalsIgnoreCase("CAPTAIN") || this.getHand()[1].equalsIgnoreCase("AMBASSADOR")) {
+				rc = true;
+			}
 		}
 		
-		return false;
+		if (this.getType() == 'c') {
+			AIGotChallenged(card, rc);
+		}
+		
+		else if (this.getType() == 'h') {
+			AIChallengeResult(card, !rc);
+		}
+		
+		return rc;
 	}
 	
 	/**

@@ -596,6 +596,7 @@ public class Coup {
 				
 				// give user 1 coin
 				user.addCoins(1);
+				user.AIDoesMove("INCOME");
 			}
 			
 			// Foreign Aid
@@ -647,9 +648,12 @@ public class Coup {
 					execute = true;
 				}
 				
+				
+				
 				if (execute) {
 					// give user 2 coins
 					user.addCoins(2);
+					user.AIDoesMove("FOREIGN AID");
 				}
 			}
 			
@@ -685,6 +689,8 @@ public class Coup {
 						// remove user influence
 						user.removeInf(gs);
 					}
+					
+					
 				}
 				
 				// target will not challenge duke
@@ -695,6 +701,7 @@ public class Coup {
 				if (execute) {
 					// give user 3 coins
 					user.addCoins(3);
+					user.AIDoesMove("DUKE");
 				}
 			}
 			
@@ -785,9 +792,12 @@ public class Coup {
 						break;
 					}
 					
+					
+					
 					if (execute) {
 						// remove 1 influence from target
 						target.removeInf(gs);
+						user.AIDoesMove("ASSASSIN");
 					}
 				}
 			}
@@ -833,6 +843,7 @@ public class Coup {
 				
 				if (execute) {
 					user.ambassador(deck, gs);
+					user.AIDoesMove("Ambassador");
 				}
 			}
 			
@@ -852,33 +863,32 @@ public class Coup {
 				// target claims Captain or Ambassador
 				case 'b':
 					// get user challenge decision
-					challenge = user.challenge("CAPTAIN", gs);
+					challenge = user.challenge("2CARDS", gs);
 					
 					// user challenges Captain/Ambassador claim
 					if (challenge) {
-						win = target.hasCard("CAPTAIN");
-						boolean win2 = target.hasCard("AMBASSADOR");
-						
-						// target had neither Captain nor Ambassador
-						if (!(win || win2)) {
-							// target loses influence
-							target.removeInf(gs);
-							execute = true;
-						}
+						win = target.hasCard("2CARDS");
 						
 						// target had either Captain or Ambassador
-						else {
-							// user loses influence
+						if (win) {
+							// remove user influence
 							user.removeInf(gs);
 							
-							// swap target Captain/Ambassador for new card
-							if(isIn("CAPTAIN", target.getHand(), false)) {
+							// swap target card 
+							if (isIn("CAPTAIN", target.getHand(), false)) {
 								target.swap("CAPTAIN", deck);
 							}
 							else {
 								target.swap("AMBASSADOR", deck);
 							}
 						}
+						
+						// target had neither Captain nor Ambassador
+						else {
+							target.removeInf(gs);
+							execute = true;
+						}
+						
 					}
 					
 					// user does not challenge
@@ -923,6 +933,8 @@ public class Coup {
 					
 					// add 2 gold to user
 					user.addCoins(2);
+					
+					user.AIDoesMove("CAPTAIN");
 				}
 			}
 			
@@ -943,6 +955,7 @@ public class Coup {
 				else {
 					user.addCoins(-7);
 					target.removeInf(gs);
+					user.AIDoesMove("COUP");
 				}
 			}
 			

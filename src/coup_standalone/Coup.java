@@ -20,9 +20,6 @@ import java.util.Vector;
  */
 public class Coup {
 	
-	// debug switch
-	public static boolean dbg = false;
-	
 	// the deck
 	Deck deck = new Deck();
 	
@@ -39,6 +36,8 @@ public class Coup {
 	// Players
 	Player p1, p2;
 	
+	// Game summary
+	public Summary gameSummary;
 	
 	// For input checking
 	Vector<String> IC = new Vector<String>();
@@ -58,15 +57,7 @@ public class Coup {
 		}
 		catch (NumberFormatException nfe) {
 			
-			if (dbg) {
-				System.out.println("*DEBUG* isNumeric(\"" + s + "\") returning FALSE.\n");
-			}
-			
 			return false;
-		}
-		
-		if (dbg) {
-			System.out.println("*DEBUG* isNumeric(\"" + s + "\") returning TRUE.\n");
 		}
 		
 		return true;
@@ -85,25 +76,11 @@ public class Coup {
 	public static boolean isIn(String s, String[] a, boolean c) {
 		for (int i = 0; i < a.length; i++) {
 			if (c && s.equals(a[i])) {
-				
-				if (dbg) {
-					System.out.println("*DEBUG* isIn returning TRUE");
-				}
-				
 				return true;
 			}
-			else if (!c && s.equalsIgnoreCase(a[i])) {
-				
-				if (dbg) {
-					System.out.println("*DEBUG* isIn returning TRUE");
-				}
-				
+			else if (!c && s.equalsIgnoreCase(a[i])) {				
 				return true;
 			}
-		}
-		
-		if (dbg) {
-			System.out.println("*DEBUG* isIn returning FALSE");
 		}
 		
 		return false;
@@ -123,39 +100,20 @@ public class Coup {
 	public static boolean is_valid(String input, Vector<String> a) {
 		
 		if (input.equalsIgnoreCase("quit")) {
-			
-			if (dbg) {
-				System.out.println("*DEBUG* is_valid returning TRUE\n");
-			}
-			
 			return true;
 		}
 		else if (input.equalsIgnoreCase("help")) {
-			
-			if (dbg) {
-				System.out.println("*DEBUG* is_valid returning TRUE\n");
-			}
-			
 			return true;
 		}
 		else {
 			int vlen = a.size();
 			for (int i = 0; i < vlen; i++) {
 				if (input.equalsIgnoreCase(a.elementAt(i))) {
-					
-					if (dbg) {
-						System.out.println("*DEBUG* is_valid returning TRUE\n");
-					}
-					
 					return true;
 				}
 			}
 		}
-		
-		if (dbg) {
-			System.out.println("*DEBUG* is_valid returning FALSE");
-		}
-		
+
 		return false;
 	}
 	
@@ -173,19 +131,9 @@ public class Coup {
 		
 		for (int i = 0; i < vlen; i++) {
 			if (input.equalsIgnoreCase(a.elementAt(i))) {
-				
-				if (dbg) {
-					System.out.println("*DEBUG* is_validnq returning TRUE");
-				}
-				
 				return true;
 			}
 		}
-		
-		if (dbg) {
-			System.out.println("*DEBUG* is_validnq returning FALSE");
-		}
-		
 		return false;
 	}
 
@@ -431,10 +379,6 @@ public class Coup {
 		
 		rc = i;
 		
-		if (dbg) {
-			System.out.println("\n*DEBUG* getInput returning " + i + "\n");
-		}
-		
 		return rc;
 	}
 	
@@ -455,10 +399,6 @@ public class Coup {
 			i = s.nextLine();
 		}
 		
-		if (dbg) {
-			System.out.println("\n*DEBUG* getInputnq returning " + i + "\n");
-		}
-		
 		return i;
 	}
 	
@@ -471,30 +411,28 @@ public class Coup {
 	 */
 	public void Turn(Scanner gs) {
 		
+		// print a new line for looks
 		System.out.println();
-		
-		if (dbg) {
-			System.out.print("*DEBUG* Resetting input scanner...");
-		}
-		
+				
+		// reset input scanner
 		gs.reset();
 		
-		if (dbg) {
-			System.out.println(" Done.\n");
-		}
-		
+		// set up input & validation
 		String input = null; // user input goes here
 		Vector<String> RVI = new Vector<String>(); // valid input for turns
 		
+		// some stuff for challenge, block, and other move mechanics
 		boolean challenge = false, block = false, win = false; // booleans for block & challenge decisions & results
 		boolean execute = false, over = false, redo = false; // booleans for whether or not to execute a move, game over, or redo turn
-		
 		char decision = 'n'; // for when you must decide between blocking, challenging, or neither
 		
 		// Players
 		Player user = p1;
 		Player target = p2;
 		Player inter = null; // used for swapping players each turn
+		
+		// Set up Summary for stats
+		gameSummary = new Summary (p1, p2);
 		
 		// counters
 		int turnCount = 0;
@@ -514,10 +452,6 @@ public class Coup {
 		 *  MAIN GAME LOOP STARTS HERE
 		 */
 		while (!input.equalsIgnoreCase("quit") && !over) {
-			
-			if (dbg) {
-				System.out.println("\n*DEBUG* Starting loop on turn #" + turnCount + "\n");
-			}
 			
 			execute = false;
 			win = false;
@@ -581,16 +515,11 @@ public class Coup {
 			
 			System.out.println();
 			
-			if (dbg) {
-				System.out.print("*DEBUG* " + user.getName() + " will ");
-			}
+			// write user move to stats & log
+			// TODO
 			
 			// Income
 			if (input.equalsIgnoreCase(RVI.elementAt(0))) {
-				
-				if (dbg) {
-					System.out.println("Income");
-				}
 				
 				System.out.println(user.getName() + " uses Income."); 
 				
@@ -601,10 +530,6 @@ public class Coup {
 			
 			// Foreign Aid
 			else if (input.equalsIgnoreCase(RVI.elementAt(1))) {
-				
-				if (dbg) {
-					System.out.println("Foreign Aid");
-				}
 				
 				System.out.println(user.getName() + " uses Foreign Aid."); 
 				
@@ -660,10 +585,6 @@ public class Coup {
 			// Duke
 			else if (input.equalsIgnoreCase(RVI.elementAt(2))) {
 				
-				if (dbg) {
-					System.out.println("Duke");
-				}
-				
 				System.out.println(user.getName() + " uses Duke."); 
 				
 				// get challenge decision from target
@@ -707,10 +628,6 @@ public class Coup {
 			
 			// Assassin
 			else if (input.equalsIgnoreCase(RVI.elementAt(3))) {
-				
-				if (dbg) {
-					System.out.println("Assassin");
-				}
 				
 				// user does not have adequate gold
 				if (user.getCoins() < 3) {
@@ -805,10 +722,6 @@ public class Coup {
 			// Ambassador
 			else if (input.equalsIgnoreCase(RVI.elementAt(4))) {
 				
-				if (dbg) {
-					System.out.println("Ambassador");
-				}
-				
 				System.out.println(user.getName() + " uses Ambassador.");
 				
 				// get challenge decision from target
@@ -849,10 +762,6 @@ public class Coup {
 			
 			// Captain
 			else if (input.equalsIgnoreCase(RVI.elementAt(5))) {
-				
-				if (dbg) {
-					System.out.println("Captain");
-				}
 				
 				System.out.println(user.getName() + " uses Captain.");
 				
@@ -941,10 +850,6 @@ public class Coup {
 			// Coup
 			else if (input.equalsIgnoreCase(RVI.elementAt(6)) || user.getCoins() > 10) {
 				
-				if (dbg) {
-					System.out.println("Coup");
-				}
-				
 				System.out.println(user.getName() + " uses Coup.");
 				
 				// check for adequate coins
@@ -963,7 +868,6 @@ public class Coup {
 				break;
 			}
 			
-			// TODO: should never get here
 			else {
 				System.out.println(GEM);
 				redo = true;
@@ -1086,31 +990,12 @@ public class Coup {
 	}
 	
 	public static void main(String[] args) {
-		if (dbg) {
-			System.out.println("*DEBUG* Program started.\n");
-		}
 		
 		Scanner s = new Scanner (System.in);
 		
-		if (dbg) {
-			System.out.println("*DEBUG* Scanner created.\n");
-		}
-		
-		if (dbg) {
-			System.out.println("*DEBUG* Starting Initialization.\n");
-		}
-		
 		Coup game = new Coup(s);
 		
-		if (dbg) {
-			System.out.println("\n\n*DEBUG* Initialization complete. Starting game.\n");
-		}
-		
 		game.Turn(s);
-		
-		if (dbg) {
-			System.out.println("*DEBUG* Game ended. Closing scanner and exiting.\n");
-		}
 		
 		s.close();
 		

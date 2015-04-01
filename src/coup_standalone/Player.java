@@ -176,10 +176,6 @@ public class Player {
 			throw new IllegalArgumentException(t + " is an invalid Player type. Acceptable input is 'h' or 'c'.");
 		}
 
-		if (Coup.dbg) {
-			System.out.println("*DEBUG* Setting " + this.getName() + " type to " + tl + "\n");
-		}
-		
 		type = tl;
 		
 		System.out.println(this.getName() + " now type " + tl);
@@ -224,11 +220,7 @@ public class Player {
 		}
 		
 		vc.clear();
-		
-		if (Coup.dbg) {
-			System.out.println("*DEBUG* Setting " + this.getName() + " hand to " + h[0] + " and " + h[1] + "\n");
-		}
-		
+
 		hand = h;
 		
 	}
@@ -270,10 +262,6 @@ public class Player {
 		
 		vc.clear();
 		
-		if (Coup.dbg) {
-			System.out.println("*DEBUG* Setting " + this.getName() + " card #" + n + " to " + s + "\n");
-		}
-		
 		hand[n-1] = s;
 		
 	}
@@ -293,10 +281,6 @@ public class Player {
 			throw new IllegalArgumentException("Invalid amount of influence. Players must have between 0 and 2 influence.");
 		}
 		
-		if (Coup.dbg) {
-			System.out.println("*DEBUG* Setting " + this.getName() + " influence to " + n + "\n");
-		}
-		
 		influence = n;
 		
 	}
@@ -307,12 +291,16 @@ public class Player {
 	 * @param s	New player name to use
 	 */
 	public void setName(String s) {
-		
-		if (Coup.dbg) {
-			System.out.println("*DEBUG* Setting player name to " + s + "\n");
-		}
-		
 		name = s;
+	}
+	
+	// AI getting notified of human card being revealed if they are losing influence
+	public void AIRevealCard(String card) {
+		return;
+	}
+	
+	public String AICardToReveal() {
+		return this.getHand()[0];
 	}
 	
 	/**
@@ -329,10 +317,6 @@ public class Player {
 	 */
 	public void removeInf(Scanner gs) {
 		
-		if (Coup.dbg) {
-			System.out.println("*DEBUG* removing influence from " + this.getName() + "\n");
-		}
-		
 		// if they have 2 influence, they must choose a card to show
 		if (this.getInf() == 2) {
 			// valid cards to keep (i.e. cards in the player's hand)
@@ -342,8 +326,8 @@ public class Player {
 			vc.addElement(this.getHand()[0]);
 			vc.addElement(this.getHand()[1]);
 			
-			// 0 for card 1, 1 for card 2
-			int showindex;
+			// input card from player revealing
+			String ic = null;
 			
 			switch (this.getType()) {
 			// human
@@ -355,34 +339,23 @@ public class Player {
 				System.out.println("\t2. " + this.getHand()[1]);
 				
 				// Get input
-				String input = Coup.getInputnq(vc, gs);
+				ic = Coup.getInputnq(vc, gs);
 				
-				// Set card to swap
-				if (input.equalsIgnoreCase(vc.elementAt(0))) {
-					showindex = 0;
-				}
-				else {
-					showindex = 1;
-				}
+				AIRevealCard(ic);
 				
 				break;
 			
 			// AI
 			case 'c':
-				showindex = 0;
 				
-				// WASIF: AI decide which card to show here
-				//			must set showindex = 0 ^ 1
-				
+				// get card to swap
+				ic = AICardToReveal();
+
 				break;
-			
-			// need this for code logic reasons, pay no mind
-			default:
-					showindex = 0;
 			}
 			
 			// Now the shown card has to go to slot 2 (just because)
-			if (showindex == 0) {
+			if (ic.equalsIgnoreCase(this.getHand()[0])) {
 				String cardswap = this.getHand()[1];
 				this.setCard(2, this.getHand()[0]);
 				this.setCard(1, cardswap);
@@ -662,6 +635,7 @@ public class Player {
 	public void AIDoesMove(String s) {
 		return;
 	}
+
 	
 	/**
 	 * <p>Function returns true if the Player has the provided card.</p>
@@ -709,6 +683,10 @@ public class Player {
 		return rc;
 	}
 	
+	public void AINewCard(String newCard, String oldCard) {
+		return;
+	}
+	
 	/**
 	 * <p>Function for swapping a card for a new one.</p>
 	 * 
@@ -748,6 +726,9 @@ public class Player {
 		
 		// get new card
 		String nc = d.pop();
+		
+		// Tell the AI what cards they're gaining and losing (in that order)
+		AINewCard(nc, hand[i]);
 		
 		// put old card back in deck
 		d.add(hand[i]);

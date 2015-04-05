@@ -980,6 +980,8 @@ public class Coup {
 		deck.deal(p1);
 		deck.deal(p2);
 		
+		p2.AIaddHandInfo(p2.getHand()[0], p2.getHand()[1]);
+		
 		System.out.println("\nAll done! Type \"start\" to begin a game, or type \"help\" for the help menu.");
 		
 		vi.add("start");

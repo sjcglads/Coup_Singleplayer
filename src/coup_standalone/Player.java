@@ -182,6 +182,10 @@ public class Player {
 		
 	}
 	
+	public void AIaddHandInfo(String card1, String card2) {
+		return;
+	}
+	
 	/**
 	 * <p>Function for setting the hand to the desired two cards.</p>
 	 * 
@@ -294,15 +298,6 @@ public class Player {
 		name = s;
 	}
 	
-	// AI getting notified of human card being revealed if they are losing influence
-	public void AIRevealCard(String card) {
-		return;
-	}
-	
-	public String AICardToReveal() {
-		return this.getHand()[0];
-	}
-	
 	/**
 	 * <p>Function for removing 1 influence from a player.</p>
 	 * 
@@ -382,6 +377,10 @@ public class Player {
 	}
 	
 	/* MISC */
+	public boolean AIchallenge(String s) {
+		return false;
+	}
+	
 	/**
 	 * <p>This function contains both the AI's logic behind deciding to challenge the other player's move,
 	 * 		and the prompts required to ask a Human player what they would like to do.</p>
@@ -439,9 +438,7 @@ public class Player {
 		
 		// AI
 		case 'c':
-			boolean rc = false; 
-			// WASIF: AI decides to CHALLENGE here
-			
+			boolean rc = AIchallenge(s); 
 			
 			String ddn = "does not";
 			
@@ -459,6 +456,10 @@ public class Player {
 		}
 	}
 
+	public boolean AIblock(String s) {
+		return false;
+	}
+	
 	/**
 	 * <p>This function contains both the AI's logic behind deciding to block the other player's move,
 	 * 		and the prompts required to ask a Human player what they would like to do.</p>
@@ -510,9 +511,7 @@ public class Player {
 		
 		// AI
 		case 'c':
-			boolean rc = false;
-			
-			// WASIF: AI decide to block here
+			boolean rc = AIblock(s);
 			
 			String ddn = "does not";
 			
@@ -528,6 +527,10 @@ public class Player {
 			return false;
 			
 		}
+	}
+	
+	public char AIdecision(String s) {
+		return 'n';
 	}
 	
 	/**
@@ -580,12 +583,16 @@ public class Player {
 		// AI
 		case 'c':
 			// AI decide to block here
-			return 'n'; // replace this with logic
+			return AIdecision(s);
 
 		default:
 			return 'n';
 			
 		}
+	}
+	
+	public String AImove() {
+		return "INCOME";
 	}
 	
 	/**
@@ -614,28 +621,9 @@ public class Player {
 			return Coup.getInput(vi, gs);
 		}
 		else {
-			String rc = "INCOME";
-			
-			// WASIF: replace return with AI logic to decide what move to make
-			
-			//System.out.println("Computer will " + rc);
-			
-			return rc;
+			return AImove();
 		}
 	}
-	
-	public void AIGotChallenged(String s, boolean won) {
-		return;
-	}
-	
-	public void AIChallengeResult(String s, boolean won) {
-		return;
-	}
-	
-	public void AIDoesMove(String s) {
-		return;
-	}
-
 	
 	/**
 	 * <p>Function returns true if the Player has the provided card.</p>
@@ -681,10 +669,6 @@ public class Player {
 		}
 		
 		return rc;
-	}
-	
-	public void AINewCard(String newCard, String oldCard) {
-		return;
 	}
 	
 	/**
@@ -740,6 +724,12 @@ public class Player {
 		d.shuffle();
 	}
 
+	public String[] AIambassador (String card1, String card2) {
+		return null;
+	}
+	
+	
+
 	/**
 	 * <p>This function contains the AI logic and user interface for using the Ambassador card.</p>
 	 * 
@@ -770,28 +760,40 @@ public class Player {
 			if (!inf) {
 				// get new card
 				nc1 = d.pop();
+				nc2 = d.pop();
 				
 				// input prompts
 				System.out.println("Please select a card to keep: ");
 				System.out.println("\t1. " + hand[0]);
 				System.out.println("\t2. " + nc1);
+				System.out.println("\t3. " + nc2);
 				
 				// set valid input
 				vi.add("1");
 				vi.add("2");
+				vi.add("3");
 				
 				// get input
 				input = Coup.getInputnq(vi, gs);
 				
 				// if they want card 2, put old card back, keep new one
-				if (input.equals("2")) {
+				if (input.equals("2") || input.equals("3")) {
 					d.add(hand[0]);
-					hand[0] = nc1;
+				
+					if (input.equals("2")) {
+						this.setCard(1, nc1);
+						d.add(nc2);
+					}
+					else {
+						this.setCard(1, nc2);
+						d.add(nc1);
+					}
 				}
 				
-				// put new one back if they want to keep old one
+				// put new ones back if they want to keep old one
 				else {
 					d.add(nc1);
+					d.add(nc2);
 				}
 			}
 			else {
@@ -857,8 +859,8 @@ public class Player {
 				ac.clear();
 				
 				// set hand
-				hand[0] = kc1;
-				hand[1] = kc2;
+				this.setCard(1, kc1);
+				this.setCard(2, kc2);
 				
 				// put cards back on deck
 				d.add(ng1);
@@ -868,14 +870,46 @@ public class Player {
 			break;
 		// AI
 		case('c'):
-			// WASIF: AI decision on what card(s) to keep
+			String[] result = AIambassador(d.pop(), d.pop());
 			
-			// if influence == 1, they only get to pick out of 2 cards, not 4
+			this.setCard(1, result[0]);
+		
+			if(this.getInf() == 2) {
+				this.setCard(2, result[1]);
+			}
+			
+			d.add(result[2]);
+			d.add(result[3]);
+			
 			break;		
 		}
 		
 		// shuffle the deck
 		d.shuffle();
 		
+	}
+	
+	public void AIRevealCard(String card) {
+		return;
+	}
+	
+	public String AICardToReveal() {
+		return this.getHand()[0];
+	}
+	
+	public void AIGotChallenged(String s, boolean won) {
+		return;
+	}
+	
+	public void AIChallengeResult(String s, boolean won) {
+		return;
+	}
+	
+	public void AIDoesMove(String s) {
+		return;
+	}
+	
+	public void AINewCard(String newCard, String oldCard) {
+		return;
 	}
 }

@@ -974,8 +974,26 @@ public class Coup {
 			p2n = initScanner.nextLine();
 		}
 		
-		p1 = new Player(p1t, p1n);
-		p2 = new Player(p2t, p2n);
+		switch(p1t) {
+		case 'h':
+			p1 = new Player(p1t, p1n);
+			break;
+		case 'c':
+			p1 = new AI(p1n);
+			break;
+		}
+		
+		switch(p2t) {
+		case 'h':
+			p2 = new Player(p2t, p2n);
+			break;
+		case 'c':
+			p2 = new AI(p2n);
+			break;
+		}
+		
+		//p1 = new Player(p1t, p1n);
+		//p2 = new Player(p2t, p2n);
 		
 		deck.deal(p1);
 		deck.deal(p2);

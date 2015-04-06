@@ -562,6 +562,8 @@ public class Player {
 		switch(this.getType()) {
 		// human
 		case 'h':
+			System.out.println("Would you like to block, challenge, or neither?");
+			
 			Vector<String> vi = new Vector<String>();
 			
 			vi.addElement("Block");
@@ -583,7 +585,21 @@ public class Player {
 		// AI
 		case 'c':
 			// AI decide to block here
-			return AIdecision(s);
+			char rc = AIdecision(s);
+			
+			switch(rc) {
+			case 'b':
+				System.out.println(this.getName() + " blocks!");
+				break;
+			case 'c':
+				System.out.println(this.getName() + " challenges!");
+				break;
+			case 'n':
+				System.out.println(this.getName() + " takes it like a bitch!");
+				break;
+			}
+			
+			return rc;
 
 		default:
 			return 'n';
@@ -592,6 +608,7 @@ public class Player {
 	}
 	
 	public String AImove() {
+		System.out.println("Should not print");
 		return "INCOME";
 	}
 	

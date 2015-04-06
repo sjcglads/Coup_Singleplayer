@@ -336,7 +336,7 @@ public class Player {
 				// Get input
 				ic = Coup.getInputnq(vc, gs);
 				
-				AIRevealCard(ic);
+				AIrevealCard(ic);
 				
 				break;
 			
@@ -344,7 +344,7 @@ public class Player {
 			case 'c':
 				
 				// get card to swap
-				ic = AICardToReveal();
+				ic = AIcardToReveal();
 
 				break;
 			}
@@ -446,7 +446,7 @@ public class Player {
 				ddn = "does";
 			}
 			
-			System.out.println("\nComputer  " + ddn + " block.");
+			System.out.println("\nComputer  " + ddn + " challenge.");
 			
 			return rc;
 
@@ -493,7 +493,7 @@ public class Player {
 		// human
 		case 'h':
 			
-			System.out.println("Would you like to challenge? (Y/N");
+			System.out.println("Would you like to block? (Y/N)");
 			
 			Vector<String> vi = new Vector<String>();
 			
@@ -661,6 +661,7 @@ public class Player {
 		vc.addElement("ASSASSIN");
 		vc.addElement("AMBASSADOR");
 		vc.addElement("CAPTAIN");
+		vc.addElement("2CARDS");
 		
 		// check for valid card name
 		if (!vc.contains(card)) {
@@ -678,11 +679,11 @@ public class Player {
 		}
 		
 		if (this.getType() == 'c') {
-			AIGotChallenged(card, rc);
+			AIgotChallenged(card, rc);
 		}
 		
 		else if (this.getType() == 'h') {
-			AIChallengeResult(card, !rc);
+			AIchallengeResult(card, !rc);
 		}
 		
 		return rc;
@@ -729,7 +730,7 @@ public class Player {
 		String nc = d.pop();
 		
 		// Tell the AI what cards they're gaining and losing (in that order)
-		AINewCard(nc, hand[i]);
+		AInewCard(nc, hand[i]);
 		
 		// put old card back in deck
 		d.add(hand[i]);
@@ -906,27 +907,27 @@ public class Player {
 		
 	}
 	
-	public void AIRevealCard(String card) {
+	public void AIrevealCard(String card) {
 		return;
 	}
 	
-	public String AICardToReveal() {
+	public String AIcardToReveal() {
 		return this.getHand()[0];
 	}
 	
-	public void AIGotChallenged(String s, boolean won) {
+	public void AIgotChallenged(String s, boolean won) {
 		return;
 	}
 	
-	public void AIChallengeResult(String s, boolean won) {
+	public void AIchallengeResult(String s, boolean won) {
 		return;
 	}
 	
-	public void AIDoesMove(String s) {
+	public void AIdoesMove(String s) {
 		return;
 	}
 	
-	public void AINewCard(String newCard, String oldCard) {
+	public void AInewCard(String newCard, String oldCard) {
 		return;
 	}
 }

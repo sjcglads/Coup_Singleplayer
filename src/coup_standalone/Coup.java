@@ -525,7 +525,7 @@ public class Coup {
 				
 				// give user 1 coin
 				user.addCoins(1);
-				user.AIDoesMove("INCOME");
+				user.AIdoesMove("INCOME");
 			}
 			
 			// Foreign Aid
@@ -578,7 +578,7 @@ public class Coup {
 				if (execute) {
 					// give user 2 coins
 					user.addCoins(2);
-					user.AIDoesMove("FOREIGN AID");
+					user.AIdoesMove("FOREIGN AID");
 				}
 			}
 			
@@ -622,7 +622,7 @@ public class Coup {
 				if (execute) {
 					// give user 3 coins
 					user.addCoins(3);
-					user.AIDoesMove("DUKE");
+					user.AIdoesMove("DUKE");
 				}
 			}
 			
@@ -714,7 +714,7 @@ public class Coup {
 					if (execute) {
 						// remove 1 influence from target
 						target.removeInf(gs);
-						user.AIDoesMove("ASSASSIN");
+						user.AIdoesMove("ASSASSIN");
 					}
 				}
 			}
@@ -756,7 +756,7 @@ public class Coup {
 				
 				if (execute) {
 					user.ambassador(deck, gs);
-					user.AIDoesMove("Ambassador");
+					user.AIdoesMove("Ambassador");
 				}
 			}
 			
@@ -843,7 +843,7 @@ public class Coup {
 					// add 2 gold to user
 					user.addCoins(2);
 					
-					user.AIDoesMove("CAPTAIN");
+					user.AIdoesMove("CAPTAIN");
 				}
 			}
 			
@@ -860,7 +860,7 @@ public class Coup {
 				else {
 					user.addCoins(-7);
 					target.removeInf(gs);
-					user.AIDoesMove("COUP");
+					user.AIdoesMove("COUP");
 				}
 			}
 			
@@ -886,7 +886,7 @@ public class Coup {
 		
 		String winner = user.getName();
 		
-		if (user.getInf() == 0) {
+		if (user.getInf() <= 0) {
 			winner = target.getName();
 		}
 		

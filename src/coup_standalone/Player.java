@@ -336,7 +336,7 @@ public class Player {
 				// Get input
 				ic = Coup.getInputnq(vc, gs);
 				
-				AIrevealCard(ic);
+				//AIrevealCard(ic);
 				
 				break;
 			
@@ -928,6 +928,10 @@ public class Player {
 	}
 	
 	public void AInewCard(String newCard, String oldCard) {
+		return;
+	}
+
+	public void AIgotCouped() {
 		return;
 	}
 }

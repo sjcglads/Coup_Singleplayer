@@ -557,6 +557,8 @@ public class Coup {
 							// remove user influence
 							user.removeInf(gs);
 							
+							target.AIrevealCard(user.getHand()[1]);
+							
 							// swap target Duke for new card
 							target.swap("DUKE", deck);
 						}
@@ -580,6 +582,7 @@ public class Coup {
 					user.addCoins(2);
 					user.AIdoesMove("FOREIGN AID");
 				}
+				
 			}
 			
 			// Duke
@@ -609,6 +612,8 @@ public class Coup {
 					else {
 						// remove user influence
 						user.removeInf(gs);
+						
+						target.AIrevealCard(user.getHand()[1]);
 					}
 					
 					
@@ -668,6 +673,8 @@ public class Coup {
 								// user loses influence
 								user.removeInf(gs);
 								
+								target.AIrevealCard(user.getHand()[1]);
+								
 								// target swap Contessa for new card
 								target.swap("CONTESSA", deck);
 							}
@@ -699,6 +706,8 @@ public class Coup {
 						else {
 							// user loses influence
 							user.removeInf(gs);
+							
+							target.AIrevealCard(user.getHand()[1]);
 						}
 						
 						break;
@@ -746,6 +755,8 @@ public class Coup {
 					else {
 						// user remove influence
 						user.removeInf(gs);
+						
+						target.AIrevealCard(user.getHand()[1]);
 					}
 				}
 				
@@ -782,6 +793,8 @@ public class Coup {
 						if (win) {
 							// remove user influence
 							user.removeInf(gs);
+							
+							target.AIrevealCard(user.getHand()[1]);
 							
 							// swap target card 
 							if (isIn("CAPTAIN", target.getHand(), false)) {
@@ -826,6 +839,8 @@ public class Coup {
 					else {
 						// user loses influence
 						user.removeInf(gs);
+						
+						target.AIrevealCard(user.getHand()[1]);
 					}
 					
 					break;
@@ -861,6 +876,8 @@ public class Coup {
 					user.addCoins(-7);
 					target.removeInf(gs);
 					user.AIdoesMove("COUP");
+					
+					if (user.getType() == 'h') target.AIgotCouped();
 				}
 			}
 			
@@ -888,6 +905,10 @@ public class Coup {
 		
 		if (user.getInf() <= 0) {
 			winner = target.getName();
+		}
+		
+		else if (target.getInf() <= 0) {
+			winner = user.getName();
 		}
 		
 		System.out.println("Game has ended, and " + winner + " is the victor.");

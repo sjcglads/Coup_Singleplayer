@@ -41,14 +41,15 @@ public class Summary {
 	 * "ASS BLOCKS"		= Times blocked Assassin
 	 * "ASS CHLGS"		= Times challenged Assassin
 	 * "TESSA CHLGS"	= Times challenged Contessa
+	 * "2CARDS CHLGS"	= Times challenged Ambassador/Captain simultaneously
 	 * 
 	 */
 	
 	// Indices
-	Vector<String> keys = new Vector<String>();
+	private Vector<String> keys = new Vector<String>();
 	
 	// Maps
-	Map<String, Integer> p1counts, p2counts, gamecounts;
+	private Map<String, Integer> p1counts, p2counts, gamecounts;
 	
 	
 	/* CONSTRUCTORS/DESTRUCTORS/OTHER SIMILAR */
@@ -77,7 +78,9 @@ public class Summary {
 	 * @param p2
 	 */
 	public Summary(Player p1, Player p2) {
-		// TODO 
+		// set names
+		p1name = p1.getName();
+		p2name = p2.getName();
 		
 		// create the stat hashmaps
 		p1counts = new HashMap<String, Integer>();
@@ -109,14 +112,15 @@ public class Summary {
 		keys.addElement("CPTN CHLGS");
 		keys.addElement("ASS BLOCKS");
 		keys.addElement("ASS CHLGS");
-		keys.addElement("TESS CHLGS");
+		keys.addElement("TESSA CHLGS");
+		keys.addElement("2CARDS CHLGS");
 	}
 	
-	public void IncStat(String s, Player p) throws IllegalArgumentException {
+	public void IncPlayerStat(String s, Player p) throws IllegalArgumentException {
 		
 		// check for valid move name
 		if (!this.getKeys().contains(s)) {
-			throw new IllegalArgumentException("Invalid move name.");
+			throw new IllegalArgumentException("Invalid stat name: " + s);
 		}
 		
 		// get the map
@@ -126,7 +130,17 @@ public class Summary {
 		int oldvalue = m.get(s);
 		
 		// replace it with increment
-		m.replace(s, oldvalue++);
+		m.replace(s, oldvalue + 1);
+	}
+	
+	public void IncGameStat(String s) throws IllegalArgumentException {
+		if (!this.getKeys().contains(s)) {
+			throw new IllegalArgumentException("Invalid stat name: " + s);
+		}
+		
+		int oldvalue = gamecounts.get(s);
+		
+		gamecounts.replace(s, oldvalue + 1);
 	}
 	
 	/**
@@ -159,16 +173,25 @@ public class Summary {
 
 	
 	/* GETTERS */
-	public int getStat(String s, Player p) throws IllegalArgumentException {
+	public int getPlayerStat(String s, Player p) throws IllegalArgumentException {
 		// check for valid move name
 		if (!this.getKeys().contains(s)) {
-			throw new IllegalArgumentException("Invalid move name.");
+			throw new IllegalArgumentException("Invalid stat name: " + s);
 		}
 		
 		// get the map
 		Map<String, Integer> m = getMap(p);
 		
 		return m.get(s);
+	}
+	
+	public int getGameStat(String s) throws IllegalArgumentException {
+		// check for valid move name
+		if (!this.getKeys().contains(s)) {
+			throw new IllegalArgumentException("Invalid stat name: " + s);
+		}
+		
+		return gamecounts.get(s);
 	}
 	
 	public Vector<String> getKeys() {
@@ -219,5 +242,75 @@ public class Summary {
 	}
 	
 	/* MISC */
+	// returns a string with x tabs; used for printFullStats(Player, Player)
+	public String spacer(int x) {
+		String rc = "";
+		
+		for (int i = 0; i < x; i++) {
+			rc = rc + " ";
+		}
+		
+		return rc;
+	}
 	
+	public void printFullStats(Player p1, Player p2) {
+		int nspc = 0;
+		String currentStat = null;
+		
+		// spacer
+		System.out.println();
+		
+		// Top equals signs
+		System.out.println("=========================================");
+		
+		// Headers
+		System.out.println("|\t\t|\t|\t|\t|");
+		System.out.println("|  STAT\t\t|  Game\t|  P1\t|  P2\t|");
+		System.out.println("|\t\t|\t|\t|\t|");
+		
+		// each row gets printed here
+		for (int i = 0; i < this.getKeys().size(); i++) {
+			currentStat = this.getKeys().elementAt(i);
+			
+			// # of tabs to make column 1 uniform
+			nspc = 16 - 3 - currentStat.length();
+			
+			// print column 1
+			System.out.print("|  " + currentStat + spacer(nspc) + "|");
+			
+			// column 2
+			System.out.print("  " + this.getGameStat(currentStat) + "\t|");
+			
+			// column 3
+			System.out.print("  " + this.getPlayerStat(currentStat, p1) + "\t|");
+						
+			// column 4
+			System.out.print("  " + this.getPlayerStat(currentStat, p2) + "\t|");
+			
+			// new line
+			System.out.println();
+		}
+		
+		// Bottom equals signs
+		System.out.println("=========================================");
+	}
+
+	public void consolidateStats(Player p1, Player p2) {
+		String currentStat = null;
+		
+		int p1stat = 0, p2stat = 0;
+		
+		for (int i = 0; i < this.getKeys().size(); i++) {
+			currentStat = this.getKeys().elementAt(i);
+			p1stat = this.getPlayerStat(currentStat, p1);
+			p2stat = this.getPlayerStat(currentStat, p2);
+			
+			if (!currentStat.equals("TURN COUNT")) {
+				gamecounts.replace(currentStat, p1stat + p2stat);
+			}
+		}
+		
+		p1counts.replace("TURN COUNT", this.getGameStat("TURN COUNT"));
+		p2counts.replace("TURN COUNT", this.getGameStat("TURN COUNT"));
+	}
 }

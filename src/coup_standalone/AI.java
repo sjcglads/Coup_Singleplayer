@@ -128,8 +128,8 @@ public class AI extends Player{
 			else if (position.equals("ahead") || position.equals("slightly ahead")) utility[3] += 11;
 		}
 		public void updateUtilityWithHistory(){
-			System.out.println("Card Revealed: " + cardTheyRevealed);
-			System.out.println("AI Position: " + AIcalculatePosition());
+			//System.out.println("Card Revealed: " + cardTheyRevealed);
+			//System.out.println("AI Position: " + AIcalculatePosition());
 			if (cardsMentioned.equals("2CARDS") && !AIcalculatePosition().equals("behind")) utility[2] = 0;
 			else if (cardTheyRevealed.equals(CONTESSA) || cardsNotHave.contains(ASSASSIN) || (cardsMentioned.contains(CONTESSA) && !AIcalculatePosition().equals("behind"))) utility[1] = 0;
 			else if (cardTheyRevealed.equals(CAPTAIN) || cardsNotHave.contains(CAPTAIN) || (cardsMentioned.contains(CAPTAIN) && !AIcalculatePosition().equals("behind"))) utility[2] = 0;
@@ -375,7 +375,7 @@ public class AI extends Player{
 		if (move.equals(ASSASSIN)) myInfo.subCoins(3);
 		turn ++;
 		turnsSinceAmbassador ++;
-		System.out.println("Move is: " + move);
+		//System.out.println("Move is: " + move);
 		return move;
 	}
 	public void AIgotChallenged(String card, boolean won){
@@ -449,6 +449,12 @@ public class AI extends Player{
 				result[3] = card2;
 			}
 		}
+		
+		result[0] = this.getHand()[0];
+		result[1] = this.getHand()[1];
+		result[2] = card1;
+		result[3] = card2;
+		
 		return result;
 	}
 	public void AIgotCouped(){

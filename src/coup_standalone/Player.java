@@ -261,7 +261,7 @@ public class Player {
 		vc.addElement("CAPTAIN");
 		
 		if (!vc.contains(s)) {
-			throw new IllegalArgumentException("Invalid card name");
+			throw new IllegalArgumentException("Invalid card name: " + s);
 		}
 		
 		vc.clear();
@@ -889,7 +889,7 @@ public class Player {
 		// AI
 		case('c'):
 			String[] result = AIambassador(d.pop(), d.pop());
-			
+		
 			this.setCard(1, result[0]);
 		
 			if(this.getInf() == 2) {

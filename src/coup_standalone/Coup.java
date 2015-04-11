@@ -19,28 +19,39 @@ import java.util.Vector;
  * @see #Turn(Scanner)
  */
 public class Coup {
+	// summary for stats
+	public Summary summary;
+	
+	// summary index parametrization (only need to do it for those not moves)
+	private String TURNCOUNT = "TURN COUNT";
+	private String FABLOCKS = "F.A. BLOCKS";
+	private String DUKECHLGS = "DUKE CHLGS";
+	private String AMBDRCHLGS = "AMBDR CHLGS";
+	private String CPTNBLOCKS = "CPTN BLOCKS";
+	private String CPTNCHLGS = "CPTN CHLGS";
+	private String ASSBLOCKS = "ASS BLOCKS";
+	private String ASSCHLGS = "ASS CHLGS";
+	private String TESSACHLGS = "TESSA CHLGS";
+	private String CARDSCHLGS = "2CARDS CHLGS";
 	
 	// the deck
-	Deck deck = new Deck();
+	private Deck deck = new Deck();
 	
 	// list of possible cards
-	Vector<String> cards = new Vector<String>();
+	private Vector<String> cards = new Vector<String>();
 	
 	// Generic Error Message
-	String GEM = "Invalid Input. Please try again: ";
+	private String GEM = "Invalid Input. Please try again: ";
 	
 	// Random number generator
-	static Random rng = new Random();
-	static int cp_rng;
+	private static Random rng = new Random();
+	private static int cp_rng;
 	
 	// Players
-	Player p1, p2;
-	
-	// Game summary
-	public Summary gameSummary;
+	private Player p1, p2;
 	
 	// For input checking
-	Vector<String> IC = new Vector<String>();
+	private Vector<String> IC = new Vector<String>();
 	
 	/* MISC FUNCTIONS */
 	/**
@@ -431,9 +442,6 @@ public class Coup {
 		Player target = p2;
 		Player inter = null; // used for swapping players each turn
 		
-		// Set up Summary for stats
-		gameSummary = new Summary (p1, p2);
-		
 		// counters
 		int turnCount = 0;
 		
@@ -452,6 +460,9 @@ public class Coup {
 		 *  MAIN GAME LOOP STARTS HERE
 		 */
 		while (!input.equalsIgnoreCase("quit") && !over) {
+			
+			// increment turn count
+			summary.IncGameStat(TURNCOUNT);
 			
 			execute = false;
 			win = false;
@@ -515,9 +526,6 @@ public class Coup {
 			
 			System.out.println();
 			
-			// write user move to stats & log
-			// TODO
-			
 			// Income
 			if (input.equalsIgnoreCase(RVI.elementAt(0))) {
 				
@@ -538,11 +546,17 @@ public class Coup {
 				
 				// target blocks
 				if (block) {
+					// increment target F.A. BLOCKS stat
+					summary.IncPlayerStat(FABLOCKS, target);
+					
 					// get challenge decision from user
 					challenge = user.challenge("DUKE", gs);
 					
 					// user challenges block
 					if (challenge) {
+						// increment user DUKE CHLGS stat
+						summary.IncPlayerStat(DUKECHLGS, user);
+						
 						win = target.hasCard("DUKE");
 						
 						// target did not have Duke
@@ -595,6 +609,9 @@ public class Coup {
 				
 				// target will challenge duke
 				if (challenge) {
+					// increment target DUKE CHLGS stat
+					summary.IncPlayerStat(DUKECHLGS, target);
+					
 					win = user.hasCard("DUKE");
 					
 					// user had a Duke
@@ -654,11 +671,17 @@ public class Coup {
 					switch (decision) {
 					// target claims Contessa
 					case 'b':
+						// increment target ASS BLOCKS stat
+						summary.IncPlayerStat(ASSBLOCKS, target);
+						
 						// get challenge decision from user
 						challenge = user.challenge("CONTESSA", gs);
 						
 						// user challenges Contessa claim
 						if (challenge) {
+							// increment user TESSA CHLGS stat
+							summary.IncPlayerStat(TESSACHLGS, user);
+							
 							win = target.hasCard("CONTESSA");
 							
 							// target did not have a Contessa
@@ -689,6 +712,9 @@ public class Coup {
 					
 					// target challenges Assassin
 					case 'c':
+						// increment target ASS CHLGS stat
+						summary.IncPlayerStat(ASSCHLGS, target);
+						
 						win = user.hasCard("ASSASSIN");
 						
 						// user had Assassin
@@ -738,6 +764,9 @@ public class Coup {
 				
 				// target challenges Ambassador
 				if (challenge) {
+					// increment target AMBDR CHLGS stat
+					summary.IncPlayerStat(AMBDRCHLGS, target);
+					
 					win = user.hasCard("AMBASSADOR");
 					
 					// user had Ambassador
@@ -782,6 +811,9 @@ public class Coup {
 				switch(decision) {
 				// target claims Captain or Ambassador
 				case 'b':
+					// increment target CPTN BLOCKS stat
+					summary.IncPlayerStat(CPTNBLOCKS, target);
+					
 					// get user challenge decision
 					challenge = user.challenge("2CARDS", gs);
 					
@@ -791,6 +823,9 @@ public class Coup {
 						
 						// target had either Captain or Ambassador
 						if (win) {
+							// increment user 2CARDS CHLGS stat
+							summary.IncPlayerStat(CARDSCHLGS, user);
+							
 							// remove user influence
 							user.removeInf(gs);
 							
@@ -822,6 +857,9 @@ public class Coup {
 				
 				// target challenges Captain
 				case 'c':
+					// increment target CPTN CHLGS stat
+					summary.IncPlayerStat(CPTNCHLGS, target);
+					
 					win = user.hasCard("CAPTAIN");
 					
 					// user had Captain
@@ -899,9 +937,12 @@ public class Coup {
 			if (user.getInf() == 0 || target.getInf() == 0) {
 				over = true;
 			}
+			
+			// end of turn stat updates
+			summary.IncPlayerStat(input, user);
 		}
 		
-		String winner = user.getName();
+		String winner = null;
 		
 		if (user.getInf() <= 0) {
 			winner = target.getName();
@@ -912,6 +953,12 @@ public class Coup {
 		}
 		
 		System.out.println("Game has ended, and " + winner + " is the victor.");
+		
+		// consolidate stats
+		summary.consolidateStats(p1, p2);
+		
+		// print stats
+		summary.printFullStats(p1, p2);
 		
 		System.out.print("Quitting...");
 		
@@ -1021,6 +1068,8 @@ public class Coup {
 		
 		p2.AIaddHandInfo(p2.getHand()[0], p2.getHand()[1]);
 		
+		summary = new Summary(p1, p2);
+		
 		System.out.println("\nAll done! Type \"start\" to begin a game, or type \"help\" for the help menu.");
 		
 		vi.add("start");
@@ -1031,8 +1080,21 @@ public class Coup {
 	}
 	
 	public static void main(String[] args) {
+		// Scanner for human use throughout the game
+		Scanner s = new Scanner(System.in);
 		
-		Scanner s = new Scanner (System.in);
+		// for use in later redesign of UI
+		/*
+		// Create the Console User Interface
+		CUI CUI = new CUI();
+		
+		// Print a welcome for the player and ask what output mode they want
+		CUI.printWelcome();
+		
+		// ...Actually get the mode they want
+		outputMode = CUI.getLastMenuResponse();
+		*/
+		
 		
 		Coup game = new Coup(s);
 		

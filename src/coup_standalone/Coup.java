@@ -1,8 +1,9 @@
 package coup_standalone;
 
-import java.util.Scanner;
-import java.util.Random;
-import java.util.Vector;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.logging.*;
+import java.io.*;
 
 /**
  * <p>The Coup class is the main class for the software package. It contains most
@@ -934,7 +935,7 @@ public class Coup {
 			}
 			
 			// check if either player is out
-			if (user.getInf() == 0 || target.getInf() == 0) {
+			if (user.getInf() <= 0 || target.getInf() <= 0) {
 				over = true;
 			}
 			
@@ -1080,6 +1081,38 @@ public class Coup {
 	}
 	
 	public static void main(String[] args) {
+		/* IGNORE
+		
+		// Create the debugging log
+		Logger debugLog = Logger.getLogger("Debug Log");
+		debugLog.setUseParentHandlers(false);
+		
+		try {
+			// get today
+			String today = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+			String now = new SimpleDateFormat("dd-MM-yyyy HH:MM:SS").format(new Date());
+			
+			// create file handler for debug log
+			FileHandler debugLogFH = new FileHandler("../../logs/" + today + "/debug.log");
+			
+			// dunno what this is for
+			SimpleFormatter debugLogFormatter = new SimpleFormatter();
+			
+			debugLogFH.setFormatter(debugLogFormatter);
+			
+			// First write to log file
+			debugLog.info("********** START OF LOG **********");
+			debugLog.info("Current Date & Time: " + now);
+			debugLog.info("\n\n");
+		}
+		catch (SecurityException e) {
+			e.printStackTrace();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		*/
 		// Scanner for human use throughout the game
 		Scanner s = new Scanner(System.in);
 		
@@ -1094,7 +1127,6 @@ public class Coup {
 		// ...Actually get the mode they want
 		outputMode = CUI.getLastMenuResponse();
 		*/
-		
 		
 		Coup game = new Coup(s);
 		

@@ -131,12 +131,12 @@ public class AI extends Player{
 			//System.out.println("Card Revealed: " + cardTheyRevealed);
 			//System.out.println("AI Position: " + AIcalculatePosition());
 			if (cardsMentioned.equals("2CARDS") && !AIcalculatePosition().equals("behind")) utility[2] = 0;
-			else if (cardTheyRevealed.equals(CONTESSA) || cardsNotHave.contains(ASSASSIN) || (cardsMentioned.contains(CONTESSA) && !AIcalculatePosition().equals("behind"))) utility[1] = 0;
-			else if (cardTheyRevealed.equals(CAPTAIN) || cardsNotHave.contains(CAPTAIN) || (cardsMentioned.contains(CAPTAIN) && !AIcalculatePosition().equals("behind"))) utility[2] = 0;
-			else if (cardTheyRevealed.equals(AMBASSADOR) || cardsNotHave.contains(AMBASSADOR) || (cardsMentioned.contains(AMBASSADOR) && !AIcalculatePosition().equals("behind"))) utility[2] = 0;
-			else if (cardTheyRevealed.equals(DUKE) || (cardsMentioned.contains(DUKE) && !AIcalculatePosition().equals("behind"))) utility[5] = 0;
-			else if (cardTheyRevealed.equals(ASSASSIN) && !myInfo.contains(CONTESSA)) utility[4] += 10;
-			else if (cardsNotHave.contains(DUKE)) utility[3] = 0;
+			if (cardTheyRevealed.equals(CONTESSA) || cardsNotHave.contains(ASSASSIN) || (cardsMentioned.contains(CONTESSA) && !AIcalculatePosition().equals("behind"))) utility[1] = 0;
+			if (cardTheyRevealed.equals(CAPTAIN) || cardsNotHave.contains(CAPTAIN) || (cardsMentioned.contains(CAPTAIN) && !AIcalculatePosition().equals("behind"))) utility[2] = 0;
+			if (cardTheyRevealed.equals(AMBASSADOR) || cardsNotHave.contains(AMBASSADOR) || (cardsMentioned.contains(AMBASSADOR) && !AIcalculatePosition().equals("behind"))) utility[2] = 0;
+			if (cardTheyRevealed.equals(DUKE) || (cardsMentioned.contains(DUKE) && !AIcalculatePosition().equals("behind"))) utility[5] = 0;
+			if (cardTheyRevealed.equals(ASSASSIN) && !myInfo.contains(CONTESSA)) utility[4] += 10;
+			if (cardsNotHave.contains(DUKE)) utility[3] = 0;
 		}
 		public void updateUtilityWithCoins(){
 			if (myInfo.coins < 7) utility[0] = 0;
@@ -264,6 +264,7 @@ public class AI extends Player{
 		} else if (card.equals(DUKE)){
 			cardsMentioned.add(DUKE);
 			opponentInfo.addCoins(3);
+			if (turn == 1 && cardsSeen.contains(DUKE)) return true;
 		} else if (card.equals(ASSASSIN)){
 			cardsMentioned.add(ASSASSIN);
 			opponentInfo.subCoins(3);
@@ -322,6 +323,7 @@ public class AI extends Player{
 				else if (myInfo.contains(CAPTAIN) && cardsIMentioned.contains(CAPTAIN)) result = CAPTAIN;
 				else if (myInfo.contains(CONTESSA)) result = CONTESSA;
 				else if (myInfo.contains(ASSASSIN)) result = ASSASSIN;
+				else if (myInfo.contains(CAPTAIN)) result = CAPTAIN;
 			}
 		}
 		cardIRevealed = result;
@@ -385,6 +387,8 @@ public class AI extends Player{
 			if (card.equals("2CARDS")){
 				myInfo.subCoins(2);
 				opponentInfo.addCoins(2);
+				cardsNotHave.add(CAPTAIN);
+				cardsNotHave.add(AMBASSADOR);
 			} else if (card.equals(CAPTAIN)) cardsNotHave.add(CAPTAIN);
 			else if (card.equals(DUKE)) cardsNotHave.add(DUKE);
 			else if (card.equals(AMBASSADOR)) cardsNotHave.add(AMBASSADOR);

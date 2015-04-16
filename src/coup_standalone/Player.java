@@ -831,7 +831,7 @@ public class Player {
 				int k;
 				
 				// input prompt
-				System.out.println("Please select the first card to keep: ");
+				System.out.println("Please select the first card to keep (INPUT NUMBER IN LIST, NOT CARD NAME): ");
 				for (int i = 0; i < 4; i++) {
 					k = i + 1;
 					System.out.println("\t" + k + " " + ac.elementAt(i));
@@ -851,7 +851,7 @@ public class Player {
 				ac.removeElementAt(Integer.parseInt(input) - 1);
 				
 				// input prompt 2
-				System.out.println("Please select the second card to keep: ");
+				System.out.println("Please select the second card to keep(INPUT NUMBER IN LIST, NOT CARD NAME): ");
 				for (int i = 0; i < 3; i++) {
 					k = i + 1;
 					System.out.println("\t" + k + " " + ac.elementAt(i));

@@ -118,6 +118,9 @@ public class Summary {
 	
 	public void IncPlayerStat(String s, Player p) throws IllegalArgumentException {
 		
+		// convert input to upper case because UI is case-insensitive but stats are not
+		s = s.toUpperCase();
+		
 		// check for valid move name
 		if (!this.getKeys().contains(s)) {
 			throw new IllegalArgumentException("Invalid stat name: " + s);

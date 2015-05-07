@@ -3,7 +3,10 @@ package coup_standalone;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.*;
+import java.awt.EventQueue;
 import java.io.*;
+
+import javax.swing.*;
 
 /**
  * <p>The Coup class is the main class for the software package. It contains most
@@ -1064,8 +1067,10 @@ public class Coup {
 		//p1 = new Player(p1t, p1n);
 		//p2 = new Player(p2t, p2n);
 		
+
 		deck.deal(p1);
 		deck.deal(p2);
+
 		
 		p2.AIaddHandInfo(p2.getHand()[0], p2.getHand()[1]);
 		
@@ -1079,6 +1084,19 @@ public class Coup {
 		
 		return;
 	}
+	
+	/*
+	public static void newMain(String[] args) {
+		
+		EventQueue.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				GUI mainWindow = new GUI();
+				mainWindow.setVisible(true);
+			}
+		});
+	}
+	*/
 	
 	public static void main(String[] args) {
 		/* IGNORE
@@ -1112,7 +1130,13 @@ public class Coup {
 			e.printStackTrace();
 		}
 		
+		
+		IGNORE THIS TOO
+		
+		newMain(null);
+		
 		*/
+		
 		// Scanner for human use throughout the game
 		Scanner s = new Scanner(System.in);
 		

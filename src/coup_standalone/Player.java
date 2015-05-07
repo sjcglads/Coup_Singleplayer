@@ -733,10 +733,25 @@ public class Player {
 		AInewCard(nc, hand[i]);
 		
 		// put old card back in deck
-		d.add(hand[i]);
+		d.add(this.getHand()[i]);
 		
 		// set new card
-		hand[i] = nc;
+		this.setCard(i + 1, nc);
+		
+		// Tell the human what their new hand is (if necessary)
+		switch(this.getType()) {
+		case 'h':
+			System.out.println("You have lost your " + card + ", and have had it replaced with " + nc + ".\n");
+			System.out.println("Your hand is now as follows: ");
+			System.out.println("\t1. " + this.getHand()[0]);
+			System.out.println("\t2. " + this.getHand()[1] + "\n");
+			
+			break;
+		
+		default:
+			// do nothing
+			break;
+		}
 		
 		// shuffle deck
 		d.shuffle();
@@ -746,8 +761,6 @@ public class Player {
 		return null;
 	}
 	
-	
-
 	/**
 	 * <p>This function contains the AI logic and user interface for using the Ambassador card.</p>
 	 * 

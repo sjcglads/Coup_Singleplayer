@@ -24,7 +24,7 @@ import javax.swing.*;
  */
 public class Coup {
 	// summary for stats
-	public Summary summary;
+	private Summary summary;
 	
 	// summary index parametrization (only need to do it for those not moves)
 	private String TURNCOUNT = "TURN COUNT";
